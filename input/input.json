@@ -178,7 +178,7 @@
         "memory_addresses": [],
         "registers": [],
         "queue": "ready"
-    }
+    },
     {
         "pid": 1,
         "program_counter": 1,

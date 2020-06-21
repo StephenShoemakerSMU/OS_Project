@@ -2,6 +2,7 @@ use crate::process_management::pcb;
 extern crate priority_queue;
 extern crate json;
 
+
 use priority_queue::PriorityQueue;
 use std::collections::HashMap;
 
@@ -66,6 +67,22 @@ impl Processq{
         }
     }
 
+    pub fn peek(&self) -> pcb::Pcb{
+        if self.line.len() == 0 {
+            panic!();
+        } else {
+
+            let pid = self.line.peek().unwrap().0;
+            if self.verbose {
+                println!("{}: ",self.name);
+                println!("Peeking {}",pid);
+                println!("Block Info: {}",self.pid_map.get(&pid).unwrap().to_json())
+            }
+            let output = self.pid_map.get(&pid).unwrap().clone();
+            return output;
+        }
+    }
+
     pub fn contains_pid(&self, pid:usize) -> bool{
         return self.line.get(&pid) != None;
     }
@@ -82,6 +99,17 @@ impl Processq{
         return output;
     }
 
+    pub fn peek_pid(&mut self, pid: usize) -> pcb::Pcb {
+        if self.verbose {
+            println!("{}: ",self.name);
+            println!("Peeking {}",pid);
+            println!("Block Info: {}",self.pid_map.get(&pid).unwrap().to_json())
+        }
+        let output = self.pid_map.get(&pid).unwrap().clone();
+        
+        return output;
+    }
+
 
     pub fn to_json(&mut self) -> json::JsonValue {
         let mut output = Vec::<json::JsonValue>::new();
@@ -95,7 +123,7 @@ impl Processq{
         object["array"] = json::JsonValue::Array(output);
         return object;
     }
-    pub fn setVerbose(& mut self, name: String){
+    pub fn set_verbose(& mut self, name: String){
         self.verbose = true;
         self.name = name.clone();
     }
